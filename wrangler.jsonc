@@ -1,0 +1,18 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "mygarminmcp",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-01",
+  // global_fetch_strictly_public: required to fetch OAuth Client ID Metadata Documents safely.
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "observability": { "enabled": true },
+  // Database and KV namespace are created for you on first deploy.
+  "d1_databases": [{ "binding": "DB", "database_name": "garmin_mcp_db","database_id": "aa069254-6905-4ed3-a72b-897a45f2b8f9" }],
+  "kv_namespaces": [{ "binding": "OAUTH_KV","id": "8b634dc5911e4ecc8115d7942ab40fb2" }],
+  // Refresh recent days, backfill history, and decode FIT files in small steps.
+  "triggers": { "crons": ["*/10 * * * *"] },
+  // Keep settings you change in the dashboard (TIMEZONE, PLAN, ...) when a new version deploys.
+  "keep_vars": true,
+  // The Deploy to Cloudflare button asks for these when you deploy.
+  "secrets": { "required": ["GARMIN_API_KEY", "ACCESS_KEY"] }
+}
